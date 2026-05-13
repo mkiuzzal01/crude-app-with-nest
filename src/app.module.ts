@@ -5,9 +5,20 @@ import { UsersModule } from './users/users.module';
 import { ProductsModule } from './products/products.module';
 import { OrderModule } from './order/order.module';
 import { AuthModule } from './auth/auth.module';
+import { MongooseModule } from '@nestjs/mongoose';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [UsersModule, ProductsModule, OrderModule, AuthModule],
+  imports: [
+    UsersModule,
+    ProductsModule,
+    OrderModule,
+    AuthModule,
+    ConfigModule.forRoot(),
+    MongooseModule.forRoot(
+      process.env.MONGODB_URI || 'mongodb://localhost/nest',
+    ),
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
