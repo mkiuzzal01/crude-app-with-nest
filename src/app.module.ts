@@ -14,10 +14,10 @@ import { ConfigModule } from '@nestjs/config';
     ProductsModule,
     OrderModule,
     AuthModule,
-    ConfigModule.forRoot(),
-    MongooseModule.forRoot(
-      process.env.MONGODB_URI || 'mongodb://localhost/nest',
-    ),
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+    MongooseModule.forRoot(process.env.DB_URI as string),
   ],
   controllers: [AppController],
   providers: [AppService],

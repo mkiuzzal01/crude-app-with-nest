@@ -1,23 +1,39 @@
 import { Controller, Get, Body, Patch, Param, Delete } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { sendResponse } from 'src/common/utils/send-response';
 
-@Controller('users')
+@Controller('user')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get('/all')
-  findAll() {
-    return this.usersService.findAll();
+  async findAll() {
+    const result = await this.usersService.findAll();
+    return sendResponse({
+      statusCode: 200,
+      message: 'All users retrieved successfully',
+      data: result,
+    });
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usersService.findOne(id);
+  async findOne(@Param('id') id: string) {
+    const result = await this.usersService.findOne(id);
+    return sendResponse({
+      statusCode: 200,
+      message: 'User retrieved successfully',
+      data: result,
+    });
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(id, updateUserDto);
+  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+    const result = await this.usersService.update(id, updateUserDto);
+    return sendResponse({
+      statusCode: 200,
+      message: 'User updated successfully',
+      data: result,
+    });
   }
 }
