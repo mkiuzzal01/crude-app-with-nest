@@ -1,3 +1,19 @@
-export const databaseConfig = {
-  uri: process.env.MONGODB_URI || 'mongodb://localhost:27017/crud_app_test_db',
-};
+import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+
+@Module({
+  imports: [
+    TypeOrmModule.forRoot({
+      type: process.env.DB_TYPE as any,
+      host: process.env.DB_HOST!,
+      port: parseInt(process.env.DB_PORT!),
+      username: process.env.DB_USER!,
+      password: process.env.DB_PASSWORD!,
+      database: process.env.DB_NAME!,
+      entities: [__dirname + '/**/*.entity{.ts,.js}'],
+      synchronize: true,
+      autoLoadEntities: true,
+    }),
+  ],
+})
+export class DatabaseModule {}

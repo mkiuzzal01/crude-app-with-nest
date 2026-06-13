@@ -5,9 +5,16 @@ import { UsersModule } from './users/users.module';
 import { ProductsModule } from './products/products.module';
 import { OrderModule } from './order/order.module';
 import { AuthModule } from './auth/auth.module';
+import { DatabaseModule } from './config/database.config';
 
 @Module({
-  imports: [UsersModule, ProductsModule, OrderModule, AuthModule],
+  imports: [
+    DatabaseModule,
+    UsersModule,
+    ProductsModule,
+    OrderModule,
+    AuthModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
