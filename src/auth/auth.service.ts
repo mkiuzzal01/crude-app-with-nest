@@ -25,7 +25,7 @@ export class AuthService {
     }
 
     const payload = {
-      sub: user._id,
+      sub: user.id,
       email: user.email,
     };
 
@@ -38,7 +38,7 @@ export class AuthService {
   }
 
   async login(loginDto: LoginDto) {
-    const user = await this.usersService.findOne(loginDto.email);
+    const user = await this.usersService.findOne(loginDto.email as any);
     console.log(user);
     if (!user) {
       throw new Error('Invalid credentials');
@@ -51,7 +51,7 @@ export class AuthService {
       throw new Error('Invalid credentials');
     }
     const payload = {
-      sub: user._id,
+      sub: user.id,
       email: user.email,
     };
     const accessToken = await this.jwtService.signAsync(payload);

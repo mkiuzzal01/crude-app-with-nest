@@ -7,9 +7,10 @@ export class AppService {
       status: 200,
       message: 'The Crud-App is running successfully.',
       data: {
-        name: 'Crud-App',
+        name: 'Crud-App-with-nest',
         version: '1.0.0',
-        description: 'A simple crud application',
+        description:
+          'A simple crud application with user, product and order management',
       },
     };
   }
