@@ -4,12 +4,15 @@ import {
   ArgumentsHost,
   HttpException,
   HttpStatus,
+  Logger,
 } from '@nestjs/common';
 
 import { Request, Response } from 'express';
 
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
+  private readonly logger = new Logger('HttpExceptionFilter');
+
   catch(exception: any, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
 
@@ -29,10 +32,12 @@ export class HttpExceptionFilter implements ExceptionFilter {
         typeof exceptionResponse === 'string'
           ? exceptionResponse
           : (exceptionResponse as any).message;
+    } else {
+      this.logger.error(exception);
     }
 
     // Mongo Duplicate Key Error
-    if (exception.code === 11000) {
+    if (exception?.code === 11000) {
       status = HttpStatus.CONFLICT;
       message = 'Email already exists';
     }

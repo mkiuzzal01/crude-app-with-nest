@@ -5,42 +5,81 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+
 import { User } from './entities/user.entity';
-import { RegisterDto } from 'src/auth/dto/register.dto';
+import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
-    private userRepo: Repository<User>,
+    private readonly userRepository: Repository<User>,
   ) {}
 
-  async create(registerUser: RegisterDto) {
-    const existingUser = await this.userRepo.findOne({
-      where: { email: registerUser.email },
+  async create(createUserDto: CreateUserDto): Promise<User> {
+    const existingUser = await this.userRepository.findOne({
+      where: { email: createUserDto.email },
     });
 
     if (existingUser) {
-      throw new ConflictException('Email already exists');
+      throw new ConflictException('Email already exists.');
     }
 
-    const user = this.userRepo.create(registerUser);
-    return this.userRepo.save(user);
+    const user = this.userRepository.create(createUserDto);
+
+    return await this.userRepository.save(user);
   }
 
-  async findAll() {
-    return this.userRepo.find();
+  async findAll(): Promise<User[]> {
+    return await this.userRepository.find();
   }
 
-  async findOne(id: number) {
-    const user = await this.userRepo.findOne({ where: { id } });
-    if (!user) throw new NotFoundException('User not found');
+  async findOne(id: number): Promise<User> {
+    const user = await this.userRepository.findOne({
+      where: { id },
+    });
+
+    if (!user) {
+      throw new NotFoundException(`User with ID ${id} not found.`);
+    }
+
     return user;
   }
 
-  async update(id: number, updateUserDto: UpdateUserDto) {
-    await this.userRepo.update(id, updateUserDto);
-    return this.userRepo.findOne({ where: { id } });
+  async findByEmail(email: string): Promise<User> {
+    const user = await this.userRepository.findOne({
+      where: { email },
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found.');
+    }
+
+    return user;
+  }
+
+  async update(id: number, updateUserDto: UpdateUserDto): Promise<User> {
+    const user = await this.findOne(id);
+
+    if (updateUserDto.email && updateUserDto.email !== user.email) {
+      const existingUser = await this.userRepository.findOne({
+        where: { email: updateUserDto.email },
+      });
+
+      if (existingUser) {
+        throw new ConflictException('Email already exists.');
+      }
+    }
+
+    this.userRepository.merge(user, updateUserDto);
+
+    return await this.userRepository.save(user);
+  }
+
+  async remove(id: number): Promise<void> {
+    const user = await this.findOne(id);
+
+    await this.userRepository.remove(user);
   }
 }
