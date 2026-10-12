@@ -15,20 +15,20 @@ export class CreateUserDto {
   @IsString()
   @IsNotEmpty()
   @MaxLength(50)
-  fname: string;
+  fname!: string;
 
   @IsString()
   @IsNotEmpty()
   @MaxLength(50)
-  lname: string;
+  lname!: string;
 
   @IsEmail()
-  email: string;
+  email!: string;
 
   @IsString()
   @MinLength(6)
   @MaxLength(100)
-  password: string;
+  password!: string;
 
   @IsOptional()
   @IsEnum(Role)

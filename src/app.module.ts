@@ -7,15 +7,17 @@ import { ProductsModule } from './products/products.module';
 import { OrderModule } from './order/order.module';
 import { AuthModule } from './auth/auth.module';
 import { DatabaseModule } from './config/database.config';
+import { CategoriesModule } from './categories/categories.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     DatabaseModule,
+    AuthModule,
     UsersModule,
+    CategoriesModule,
     ProductsModule,
     OrderModule,
-    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

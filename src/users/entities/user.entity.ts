@@ -4,33 +4,35 @@ import { Gender, Role, Status } from '../user.type';
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @Column()
-  fname: string;
+  fname!: string;
 
   @Column()
-  lname: string;
+  lname!: string;
 
   @Column({ unique: true })
-  email: string;
+  email!: string;
 
-  @Column()
-  password: string;
+  @Column({
+    select: false,
+  })
+  password!: string;
 
   @Column({
     type: 'enum',
     enum: Role,
     default: Role.USER,
   })
-  role: Role;
+  role!: Role;
 
   @Column({
     type: 'enum',
     enum: Status,
     default: Status.PENDING,
   })
-  status: Status;
+  status!: Status;
 
   @Column({ nullable: true })
   avatar?: string;

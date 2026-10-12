@@ -1,17 +1,14 @@
 import {
   Body,
   Controller,
-  Get,
   HttpCode,
   HttpStatus,
   Post,
-  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
-import { AuthGuard } from './auth.guard';
 import { sendResponse } from 'src/common/utils/send-response';
 import { SetCookies } from 'src/common/decorators/set-cookies.decorator';
 import { CookieInterceptor } from 'src/common/interceptors/cookie.interceptor';
@@ -25,6 +22,7 @@ export class AuthController {
   @Post('register')
   @HttpCode(HttpStatus.CREATED)
   async register(@Body() registerDto: RegisterDto) {
+    console.log(registerDto);
     const result = await this.authService.register(registerDto);
 
     return sendResponse({
