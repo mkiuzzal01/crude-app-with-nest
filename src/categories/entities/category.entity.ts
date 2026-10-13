@@ -4,8 +4,13 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 export class Category {
   @PrimaryGeneratedColumn()
   id!: number;
+
   @Column({ unique: true })
   name!: string;
-  description: string | undefined;
-  image?: string;
+
+  @Column({ type: 'text', nullable: true })
+  description!: string;
+
+  @Column({ type: 'text', nullable: true })
+  image!: string;
 }
