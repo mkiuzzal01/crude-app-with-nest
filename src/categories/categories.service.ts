@@ -34,6 +34,7 @@ export class CategoriesService {
   }
 
   async update(id: number, updateCategoryDto: UpdateCategoryDto) {
+    console.log(id, updateCategoryDto);
     await this.categoryRepository.update(id, updateCategoryDto);
     return this.findOne(id);
   }
